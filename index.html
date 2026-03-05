@@ -1,43 +1,545 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Forgelet</title>
+  <meta name="description" content="Forgelet: small ideas, crafted. Mini projects, games, printables, and experiments." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 60px;
-      background: #f7f7f7;
+    :root{
+      --bg: #0b0c10;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.09);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --faint: rgba(255,255,255,0.55);
+      --line: rgba(255,255,255,0.12);
+      --shadow: 0 18px 50px rgba(0,0,0,0.45);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
     }
 
-    h1 {
-      font-size: 48px;
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 15%, rgba(255,255,255,0.12), rgba(255,255,255,0) 60%),
+        radial-gradient(900px 500px at 80% 30%, rgba(255,255,255,0.10), rgba(255,255,255,0) 55%),
+        radial-gradient(700px 400px at 40% 90%, rgba(255,255,255,0.08), rgba(255,255,255,0) 60%),
+        var(--bg);
+      line-height: 1.5;
     }
 
-    p {
-      font-size: 18px;
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-underline-offset: 4px; }
+
+    .wrap{
+      max-width: 1020px;
+      margin: 0 auto;
+      padding: 26px 18px 70px;
     }
 
-    a {
-      display: block;
-      margin: 20px;
-      font-size: 20px;
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 10px 8px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .mark{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: var(--mono);
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+    }
+    nav{
+      display:flex;
+      gap: 14px;
+      align-items:center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .navlink{
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-size: 14px;
       text-decoration: none;
-      color: #333;
+    }
+    .navlink:hover{
+      border-color: var(--line);
+      background: rgba(255,255,255,0.04);
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    /* Hero */
+    .hero{
+      margin-top: 14px;
+      padding: 34px 22px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background:
+        radial-gradient(450px 240px at 15% 20%, rgba(255,255,255,0.10), rgba(255,255,255,0) 60%),
+        radial-gradient(500px 240px at 70% 15%, rgba(255,255,255,0.08), rgba(255,255,255,0) 60%);
+      pointer-events:none;
+    }
+    .hero-inner{ position: relative; }
+    .kicker{
+      display:inline-flex;
+      gap: 8px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.6px;
+    }
+    .sub{
+      margin: 0 0 18px;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .cta{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-weight: 600;
+      text-decoration:none;
+    }
+    .btn:hover{
+      background: rgba(255,255,255,0.08);
+      text-decoration:none;
+    }
+    .btn.primary{
+      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* Sections */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      padding: 18px;
+    }
+    .panel h2{
+      margin: 2px 0 8px;
+      font-size: 16px;
+      letter-spacing: 0.1px;
+    }
+    .panel p{
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    @media (max-width: 560px){
+      .cards{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.03));
+      padding: 14px;
+      transition: transform 120ms ease, background 120ms ease;
+      min-height: 118px;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      background: linear-gradient(180deg, var(--card2), rgba(255,255,255,0.04));
+      text-decoration: none;
+    }
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      align-items:flex-start;
+    }
+    .tag{
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(255,255,255,0.72);
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.20);
+      white-space: nowrap;
+    }
+    .card h3{
+      margin: 2px 0 6px;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+    }
+    .card p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .meta{
+      margin-top: 10px;
+      color: var(--faint);
+      font-size: 12px;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .list{
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .item{
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+    }
+    .item strong{ font-size: 14px; }
+    .item span{ color: var(--muted); font-size: 13px; }
+
+    footer{
+      margin-top: 22px;
+      padding: 18px 8px 0;
+      color: var(--faint);
+      font-size: 13px;
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+      font-size: 13px;
     }
   </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="mark">{}</div>
+        <div>Forgelet</div>
+        <div class="pill">small ideas, crafted</div>
+      </div>
+      <nav>
+        <a class="navlink" href="#featured">Featured</a>
+        <a class="navlink" href="#games">Games</a>
+        <a class="navlink" href="#printables">Printables</a>
+        <a class="navlink" href="#tools">Tools</a>
+        <a class="navlink" href="#experiments">Experiments</a>
+      </nav>
+    </div>
 
-<h1>Forgelet 🔧</h1>
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="kicker">🔧 Forgelet Studio • tiny projects you can finish</div>
+        <h1>A small forge for playful projects.</h1>
+        <p class="sub">
+          Mini games, printables, and little tools. Each one is small enough to explore in minutes,
+          but polished enough to keep.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="#featured">Browse featured</a>
+          <a class="btn" href="https://github.com/forgelet" target="_blank" rel="noreferrer">View on GitHub</a>
+        </div>
+      </div>
+    </section>
 
-<p>Small ideas, crafted.</p>
+    <div class="grid">
+      <section class="panel" id="featured">
+        <h2>Featured</h2>
+        <p>Put your best 2 to 4 creations here. Swap the links when you build them.</p>
 
-<a href="#">Games</a>
-<a href="#">Projects</a>
-<a href="#">Printables</a>
-<a href="#">Experiments</a>
+        <div class="cards">
+          <a class="card" href="#" title="Coming soon">
+            <div class="card-top">
+              <div>
+                <h3>Little City Builder</h3>
+                <p>A tiny browser sandbox for kids: place roads, parks, and houses.</p>
+              </div>
+              <div class="tag">game</div>
+            </div>
+            <div class="meta">
+              <span>status: coming soon</span>
+              <span>type: web</span>
+            </div>
+          </a>
 
+          <a class="card" href="#" title="Coming soon">
+            <div class="card-top">
+              <div>
+                <h3>Printable Quest Cards</h3>
+                <p>Quick activity cards: “find 5 round things”, “draw a new animal”, etc.</p>
+              </div>
+              <div class="tag">printable</div>
+            </div>
+            <div class="meta">
+              <span>PDF</span>
+              <span>A4</span>
+            </div>
+          </a>
+
+          <a class="card" href="#" title="Coming soon">
+            <div class="card-top">
+              <div>
+                <h3>Split Spend Mini</h3>
+                <p>A lightweight expense splitter for friends, fast and no login.</p>
+              </div>
+              <div class="tag">tool</div>
+            </div>
+            <div class="meta">
+              <span>single page</span>
+              <span>mobile-friendly</span>
+            </div>
+          </a>
+
+          <a class="card" href="#" title="Coming soon">
+            <div class="card-top">
+              <div>
+                <h3>Idea Dice</h3>
+                <p>Roll two words and generate a tiny project prompt instantly.</p>
+              </div>
+              <div class="tag">experiment</div>
+            </div>
+            <div class="meta">
+              <span>random</span>
+              <span>fun</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <h2>Now forging</h2>
+        <p>A simple “what I’m building” list. Update anytime.</p>
+        <ul class="list">
+          <li class="item">
+            <div>
+              <strong>First web game</strong><br />
+              <span>tiny city builder prototype</span>
+            </div>
+            <span class="tag">1–2 weeks</span>
+          </li>
+          <li class="item">
+            <div>
+              <strong>First printable pack</strong><br />
+              <span>activity cards for kids</span>
+            </div>
+            <span class="tag">weekend</span>
+          </li>
+          <li class="item">
+            <div>
+              <strong>Micro tool</strong><br />
+              <span>expense split page</span>
+            </div>
+            <span class="tag">next</span>
+          </li>
+        </ul>
+      </aside>
+    </div>
+
+    <section class="panel" id="games" style="margin-top:16px;">
+      <h2>Games</h2>
+      <p>Small, replayable, and friendly. Great for quick breaks.</p>
+      <div class="cards">
+        <a class="card" href="#">
+          <div class="card-top">
+            <div>
+              <h3>City Builder</h3>
+              <p>Place tiles. Watch your tiny town grow.</p>
+            </div>
+            <div class="tag">prototype</div>
+          </div>
+          <div class="meta"><span>coming soon</span></div>
+        </a>
+        <a class="card" href="#">
+          <div class="card-top">
+            <div>
+              <h3>Shape Sort Sprint</h3>
+              <p>Drag-and-drop shapes with gentle difficulty.</p>
+            </div>
+            <div class="tag">idea</div>
+          </div>
+          <div class="meta"><span>future</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="panel" id="printables" style="margin-top:16px;">
+      <h2>Printables</h2>
+      <p>PDFs you can print at home: activities, mini planners, and games.</p>
+      <div class="cards">
+        <a class="card" href="#">
+          <div class="card-top">
+            <div>
+              <h3>Quest Cards</h3>
+              <p>Small missions for curious kids.</p>
+            </div>
+            <div class="tag">PDF</div>
+          </div>
+          <div class="meta"><span>A4</span><span>black & white friendly</span></div>
+        </a>
+        <a class="card" href="#">
+          <div class="card-top">
+            <div>
+              <h3>Color + Story Sheets</h3>
+              <p>Color a scene, then write what happens next.</p>
+            </div>
+            <div class="tag">PDF</div>
+          </div>
+          <div class="meta"><span>future</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="panel" id="tools" style="margin-top:16px;">
+      <h2>Tools</h2>
+      <p>Tiny utilities that solve annoying problems quickly.</p>
+      <div class="cards">
+        <a class="card" href="#">
+          <div class="card-top">
+            <div>
+              <h3>Split Spend Mini</h3>
+              <p>Fast expense splitting for groups.</p>
+            </div>
+            <div class="tag">web</div>
+          </div>
+          <div class="meta"><span>coming soon</span></div>
+        </a>
+        <a class="card" href="#">
+          <div class="card-top">
+            <div>
+              <h3>Margin Microcalc</h3>
+              <p>Enter cost + price, get margin instantly.</p>
+            </div>
+            <div class="tag">web</div>
+          </div>
+          <div class="meta"><span>future</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="panel" id="experiments" style="margin-top:16px;">
+      <h2>Experiments</h2>
+      <p>Small interactive ideas. Some will become bigger projects.</p>
+      <div class="cards">
+        <a class="card" href="#">
+          <div class="card-top">
+            <div>
+              <h3>Idea Dice</h3>
+              <p>Roll prompts for your next tiny build.</p>
+            </div>
+            <div class="tag">fun</div>
+          </div>
+          <div class="meta"><span>coming soon</span></div>
+        </a>
+        <a class="card" href="#">
+          <div class="card-top">
+            <div>
+              <h3>Random Recipe Twist</h3>
+              <p>Combine a base + twist ingredient for cooking ideas.</p>
+            </div>
+            <div class="tag">future</div>
+          </div>
+          <div class="meta"><span>maybe food later</span></div>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Forgelet. Built on GitHub Pages.</div>
+      <div>
+        <a href="https://github.com/forgelet" target="_blank" rel="noreferrer">GitHub</a>
+        <span style="opacity:.6;">•</span>
+        <a href="mailto:hello.forgelet@gmail.com">Email</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
